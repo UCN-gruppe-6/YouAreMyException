@@ -4,38 +4,49 @@ use Illuminate\Support\Facades\Route;
 
 /**Route::view('/driftsstatus', 'status.index')->name('status.index');*/
 
-/** Gives the view an array of carriers that we can loop through
-Should later get the carriers and messages from the API */
+/**
+ * We give the view a list of carriers with:
+ * - name: shown as text
+ * - logo: file name inside /public/images/carriers/
+ * - has_issue: red/green indicator
+ * - message: only shown if has_issue = true
+ */
 Route::view('/driftsstatus', 'status.index', [
     'carriers' => [
         [
-            'name'      => 'BPOST',
+            'name'      => 'GLS',
+            'logo'      => 'gls.png',
             'has_issue' => true,
-            'message'   => 'Planlagt strejke i Belgien — mulige forsinkelser (24.–26. november)',
+            'message'   => 'Label-generering fejler i øjeblikket.',
+        ],
+        [
+            'name'      => 'DFM',
+            'logo'      => 'dfm.png',
+            'has_issue' => true,
+            'message'   => 'Servicepoint-opslag fejler på visse adresser.',
+        ],
+        [
+            'name'      => 'PACKETA',
+            'logo'      => 'packeta.png',
+            'has_issue' => true,
+            'message'   => 'Packeta API svarer langsomt.',
         ],
         [
             'name'      => 'BRING',
+            'logo'      => 'bring.png',
             'has_issue' => true,
-            'message'   => 'Mulige forsinkelser på Bring Ekspress-forsendelser (27.10.–21.12.2025)',
+            'message'   => 'Timeout mod Bring’s API for servicepoints.',
         ],
         [
-            'name'      => 'DHL EXPRESS',
-            'has_issue' => true,
-            'message'   => 'Midlertidig suspension af alle internationale forsendelser til og fra Israel',
+            'name'      => 'POSTNORD',
+            'logo'      => 'pdk.png',
+            'has_issue' => false,
+            'message'   => null,
         ],
         [
-            'name'      => 'DHL CONNECT',
-            'has_issue' => true,
-            'message'   => 'Forsinkelser på retur-forsendelser fra Tyskland (Göttingen)',
-        ],
-        [
-            'name'      => 'UPS',
-            'has_issue' => true,
-            'message'   => 'Risiko for forsinkelser på forsendelser til USA',
-        ],
-        [
-            'name'      => 'ASENDIA',
-            'has_issue' => false, /* no errors -> green dot */
+            'name'      => 'DAO',
+            'logo'      => 'dao.png',
+            'has_issue' => false,
             'message'   => null,
         ],
     ],
