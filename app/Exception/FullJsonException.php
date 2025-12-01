@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions; // Laravel convention
+namespace App\Exception; // Laravel convention
 
 use Exception; // import the base Exception class
 
@@ -12,7 +12,7 @@ class FullJsonException extends Exception
     {
         $this->data = $data;
 
-        // Call parent constructor to set the message and code
-        parent::__construct($data['message'] ?? 'Unknown exception', $data['code'] ?? 500);
+        // Call parent constructor to set the message and code//['message']?? 'Unknown exception'
+        parent::__construct(json_encode($data,JSON_PRETTY_PRINT) , $data['code'] ?? 500 );
     }
 }

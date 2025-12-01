@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+
 class ThrowJsonException extends Command
 {
     /**
@@ -25,10 +26,10 @@ class ThrowJsonException extends Command
      */
     public function handle()
     {
-        $jsonPath = storage_path('package_not_found.json'); // or resources_path('package_not_found.json')
+        $jsonPath = resource_path('package_not_found.json');
         $json = file_get_contents($jsonPath);
         $exceptionData = json_decode($json, true); // true → PHP array
-        throw new \App\Exceptions\FullJsonException($exceptionData);
+        throw new \App\Exception\FullJsonException($exceptionData);
         //
     }
 }
