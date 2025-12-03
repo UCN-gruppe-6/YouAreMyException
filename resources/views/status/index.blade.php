@@ -203,11 +203,28 @@
     </style>
 
     <script>
+        /* Wait until the entire HTML document is loaded.
+           This ensures all buttons and rows exist before we try to use them. */
         document.addEventListener('DOMContentLoaded', function () {
+            /* Select all elements with the class "toggle-btn".
+               querySelectorAll returns a list we can loop through. */
             document.querySelectorAll('.toggle-btn').forEach(function (btn) {
+                /* Add a click event listener to each button.
+                   When the user clicks the button, the function below runs.*/
                 btn.addEventListener('click', function () {
+                    /* Find the nearest parent element with the class "status-row".
+                   closest() climbs up the DOM tree until it finds the right row.
+                   This row is the one we want to expand or collapse.*/
                     const row = btn.closest('.status-row');
+                    /* Toggle the "expanded" class on the row.
+                       If the class is not present → add it.
+                       If the class is already present → remove it.
+                       CSS can then show or hide extra content based on this class.*/
                     row.classList.toggle('expanded');
+                    /* Change the button text.
+                       If the row is expanded, show a minus (−).
+                       If the row is collapsed, show a plus (+).
+                       This gives a clear visual indicator for the user.*/
                     btn.textContent = row.classList.contains('expanded') ? '−' : '+';
                 });
             });
@@ -215,13 +232,18 @@
     </script>
 </head>
 <body>
+<!-- PAGE WRAPPER: Contains the whole page content + title of the page -->
 <div class="page-wrapper">
-    {{-- Logo / topbar kan vi lave senere – nu kun selve tabellen --}}
     <h1 class="page-title">DRIFTSSTATUS</h1>
 
+    <!-- STATUS LIST: Loop through all carriers -->
     <div class="status-list">
         @foreach($carriers as $carrier)
+
+            <!-- STATUS ROW: One row per carrier -->
             <div class="status-row">
+
+                <!-- CARRIER LOGO -->
                 <div class="carrier-logo">
                     <img
                         src="{{ asset('images/carriers/' . $carrier['logo']) }}"
@@ -229,21 +251,26 @@
                     >
                 </div>
 
+                <!-- CARRIER NAME -->
                 <div class="carrier-name">
                     {{ $carrier['name'] }}
                 </div>
 
+                <!-- STATUS PILL (Dot + Label) -->
                 <div class="status-pill">
                     <span class="status-dot {{ $carrier['has_issue'] ? 'status-dot--down' : 'status-dot--up' }}"></span>
                     <span class="status-label">Status</span>
                 </div>
 
+                <!-- MAIN STATUS MESSAGE (EXCEPTIONS) -->
                 <div class="message">
+                    <!-- CASE: Carrier has an issue -->
                     @if($carrier['has_issue'])
                         <div class="message-box">
                             <span class="message-icon">i</span>
                             <span>{{ $carrier['message'] }}</span>
                         </div>
+                        <!-- CASE: No issue -->
                     @else
                         <div class="message-box" style="opacity: 0.7;">
                             <span class="message-icon">i</span>
@@ -252,16 +279,22 @@
                     @endif
                 </div>
 
+                <!-- EXPAND/COLLAPSE BUTTON -->
                 <button type="button" class="toggle-btn">+</button>
             </div>
+            <!-- END .status-row -->
 
+            <!-- COLLAPSIBLE DETAILS SECTION -->
             <div class="details">
-                {{-- Placeholder-tekst – her kan API-data komme senere --}}
+                <!-- Placeholder for future API data -->
                 Her kan der senere komme ekstra information for <strong>{{ $carrier['name'] }}</strong>
                 (f.eks. mere detaljeret fejlbeskrivelse).
             </div>
         @endforeach
     </div>
+    <!-- END .status-list -->
+
 </div>
+<!-- END .page-wrapper -->
 </body>
 </html>
