@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<!--
+    This file renders the full "Driftsstatus" (Operational Status) page.
+
+    It displays a list of carriers (e.g., transport partners), each shown as a
+    row with: logo, name, status indicator, and a short status message.
+
+    Each row includes a toggle button (+ / .). When clicked, the row expands
+    and reveals an extra details section underneath.
+
+    The page combines:
+    - Blade templating (looping through $carriers)
+    - Custom CSS for layout, columns, and status design
+    - A small JavaScript script that handles expand/collapse interactions
+-->
 <html lang="da">
 <head>
     <meta charset="utf-8">
