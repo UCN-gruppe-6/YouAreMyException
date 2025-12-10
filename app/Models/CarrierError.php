@@ -31,7 +31,7 @@ class CarrierError extends Model
     */
     protected $casts = [
         'is_deleted' => 'boolean',
-        'carrier' => 'string',
+        'carrier' => Carrier::class, //If this doesn't work, use 'string'
     ];
 
     /**
@@ -41,7 +41,7 @@ class CarrierError extends Model
     */
     public function scopeNotDeleted(Builder $query): Builder
     {
-        return $query->where('is_deleted', false);
+        return $query->where('is_deleted', 0);
     }
 
     /**
@@ -54,5 +54,4 @@ class CarrierError extends Model
 
         return $query->whereIn('carrier', $carrierValues);
     }
-
 }

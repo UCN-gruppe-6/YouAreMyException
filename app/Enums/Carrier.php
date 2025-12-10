@@ -30,4 +30,15 @@ enum Carrier: string
                 self::DAO => 'DAO',
             };
         }
+
+        public function logoFile(): string {
+            return match ($this) {
+                self::GLS => 'gls.png',
+                self::DFM => 'dfm.png',
+                self::PACKETA => 'packeta.png',
+                self::BRING => 'bring.png',
+                self::POSTNORD => 'pdk.png',
+                self::DAO => 'dao.png',
+            };
+        }
 }
