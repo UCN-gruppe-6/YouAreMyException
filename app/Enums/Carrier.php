@@ -3,10 +3,16 @@
 namespace App\Enums;
 
 /**
- * Enum for all supported carriers in the status view.
- * Used to ensure we only show a fixed,
- * known list in frontend.
-*/
+ * Carrier Enum
+ *
+ * This enum represents all carriers supported by the drift status system.
+ * Using an enum ensures:
+ * - A fixed and controlled list of valid carriers
+ * - Cleaner filtering and mapping in the controller and model
+ *
+ * Each enum case corresponds to a carrier that must be displayed in the UI,
+ * regardless of whether the database currently contains error data for it.
+ */
 enum Carrier: string
 {
     case GLS = 'GLS';
@@ -17,8 +23,11 @@ enum Carrier: string
     case DAO = 'DAO';
 
         /**
-         * Human-readable label so the name gets nicer
-        */
+         * Returns a human-readable label for frontend display.
+         *
+         * The database may store uppercase codes, but the UI should show
+         * a nicer formatted name (e.g., "Packeta" instead of "PACKETA").
+         */
         public function label(): string
         {
             return match ($this) {
@@ -31,6 +40,15 @@ enum Carrier: string
             };
         }
 
+        /**
+         * Returns the filename of the carrier logo.
+         *
+         * The Blade view uses this value to load the corresponding image from:
+         *   /public/images/carriers/
+         *
+         * Storing filenames here keeps UI logic centralized and prevents hardcoding
+         * in Blade templates or controllers.
+         */
         public function logoFile(): string {
             return match ($this) {
                 self::GLS => 'gls.png',

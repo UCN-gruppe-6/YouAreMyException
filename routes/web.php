@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * This routes file defines the entry points for the application.
+ *
+ * - The root route ("/") loads the live drift status page, which retrieves
+ *   carrier status data through the StatusController and displays it on the frontend.
+ *
+ * - A separate test route ("/driftsstatus-test") provides mock carrier data for
+ *   UI development and demonstration purposes, allowing the page to run without
+ *   any database connection.
+ *
+ * The real route is intended for production, while the test route is a temporary
+ * development helper and can be removed once the database is accessible.
+ */
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StatusController;

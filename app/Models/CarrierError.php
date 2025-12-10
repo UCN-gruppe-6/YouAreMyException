@@ -1,8 +1,20 @@
 <?php
 
 /**
- * Model that reads the existing table in the database
-*/
+ * CarrierError Model
+ *
+ * This model represents a single error message reported by a carrier
+ * in the existing database. The application only *reads* from this table;
+ * no inserts or updates are performed by Laravel.
+ *
+ * The model provides:
+ * - Type casting (e.g., converting the carrier column into an enum)
+ * - Query scopes for filtering active (non-deleted) errors
+ * - A scope for selecting errors belonging to specific carriers
+ *
+ * The table already exists in the external system, so no migrations
+ * or schema management are handled within this Laravel project.
+ */
 
 namespace App\Models;
 
@@ -19,7 +31,7 @@ class CarrierError extends Model
     //Name of the existing table in your database
     protected $table = 'carrier_errors';
 
-    //We only read
+    //We only read the fields
     protected $fillable = [
         'carrier',
         'message',
@@ -27,31 +39,47 @@ class CarrierError extends Model
     ];
 
     /**
-     * Cast columns to proper PHP types
-    */
+     * Casts ensure the model converts database values into proper PHP types:
+     * - `is_deleted` becomes a boolean (0 → false, 1 → true)
+     * - `carrier` becomes a Carrier enum instance (if supported by the Laravel version)
+     */
     protected $casts = [
         'is_deleted' => 'boolean',
         'carrier' => Carrier::class, //If this doesn't work, use 'string'
     ];
 
     /**
-     * Scope: Only errors that are not soft deleted will be collected.
-     * is_deleted = 0 --> it's shown.
-     * is_deleted = 1 --> not shown for the customer.
-    */
+     * Query Scope: notDeleted()
+     *
+     * Filters the query so we only fetch errors that are not soft-deleted.
+     * In this system:
+     * - is_deleted = 0 → active error (should be shown)
+     * - is_deleted = 1 → removed/inactive (should NOT be shown)
+     *
+     * Usage:
+     *      CarrierError::notDeleted()->get();
+     */
     public function scopeNotDeleted(Builder $query): Builder
     {
         return $query->where('is_deleted', 0);
     }
 
     /**
-     * Scope: only errors for the given carriers.
-     * @param Carrier[] $carriers
+     * Query Scope: forCarriers()
+     *
+     * Limits the query to errors related to a specific list of carriers.
+     * The `$carriers` argument is an array of Carrier enum cases, which
+     * we convert to their underlying string values before filtering.
+     *
+     * Usage:
+     *      CarrierError::forCarriers([Carrier::GLS, Carrier::DFM])->get();
      */
     public function scopeForCarriers(Builder $query, array $carriers): Builder
     {
+        // Convert enum objects (Carrier::GLS) into string values ("GLS")
         $carrierValues = array_map(fn (Carrier $c) => $c->value, $carriers);
 
+        // Filter the database rows by allowed carriers
         return $query->whereIn('carrier', $carrierValues);
     }
 }
