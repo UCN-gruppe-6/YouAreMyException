@@ -21,5 +21,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Test seeders for the status page
+        // Can be deleted later when everything worksphp artisan db:seed
+        $this->call(StructuredExceptionsSeeder::class);
     }
 }

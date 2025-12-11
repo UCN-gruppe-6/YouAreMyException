@@ -59,6 +59,7 @@ class StatusController extends Controller
         $errors = CarrierError::query()
             ->forCarriers($carrierEnums) // Filter by allowed carriers
             ->notDeleted() // Only active (visible) errors
+            ->whereNotNull('message') // only rows with real errors
             ->get()
             ->groupBy(function (CarrierError $error) {
                 // If Laravel casts "carrier" into an enum, extract its value:

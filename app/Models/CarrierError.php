@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\Model;
 class CarrierError extends Model
 {
     //Name of the existing table in your database
-    protected $table = 'carrier_errors';
+    protected $table = 'structured_exceptions';
 
     //We only read the fields
     protected $fillable = [
