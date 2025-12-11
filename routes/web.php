@@ -1,58 +1,79 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+/**
+ * This routes file defines the entry points for the application.
+ *
+ * - The root route ("/") loads the live drift status page, which retrieves
+ *   carrier status data through the StatusController and displays it on the frontend.
+ *
+ * - A separate test route ("/driftsstatus-test") provides mock carrier data for
+ *   UI development and demonstration purposes, allowing the page to run without
+ *   any database connection.
+ *
+ * The real route is intended for production, while the test route is a temporary
+ * development helper and can be removed once the database is accessible.
+ */
 
-/**Route::view('/driftsstatus', 'status.index')->name('status.index');*/
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StatusController;
 
 /**
- * We give the view a list of carriers with:
- * - name: shown as text
- * - logo: file name inside /public/images/carriers/
- * - has_issue: red/green indicator
- * - message: only shown if has_issue = true
+ * Makes the driftstatus page into the frontpage.
+ * Calls StatusController@index when user visits.
+ * Visit the page: http://127.0.0.1:8000
+ * It page collects data from the database
  */
-Route::view('/driftsstatus', 'status.index', [
-    'carriers' => [
-        [
-            'name'      => 'GLS',
-            'logo'      => 'gls.png',
-            'has_issue' => true,
-            'message'   => 'Label-generering fejler i øjeblikket.',
-        ],
-        [
-            'name'      => 'DFM',
-            'logo'      => 'dfm.png',
-            'has_issue' => true,
-            'message'   => 'Servicepoint-opslag fejler på visse adresser.',
-        ],
-        [
-            'name'      => 'PACKETA',
-            'logo'      => 'packeta.png',
-            'has_issue' => true,
-            'message'   => 'Packeta API svarer langsomt.',
-        ],
-        [
-            'name'      => 'BRING',
-            'logo'      => 'bring.png',
-            'has_issue' => true,
-            'message'   => 'Timeout mod Bring’s API for servicepoints.',
-        ],
-        [
-            'name'      => 'POSTNORD',
-            'logo'      => 'pdk.png',
-            'has_issue' => false,
-            'message'   => null,
-        ],
-        [
-            'name'      => 'DAO',
-            'logo'      => 'dao.png',
-            'has_issue' => false,
-            'message'   => null,
-        ],
-    ],
-])->name('status.index');
+Route::get('/', [StatusController::class, 'index'])
+    ->name('status.index');
 
-Route::get('/', function () {
-    return view('welcome');
+/**
+ * TEST DATA
+ * This route returns hardcoded carriers for UI testing.
+ * Visit the page: http://127.0.0.1:8000/driftsstatus-test
+ * to see the test data
+ *
+ * In the .env file the SESSION_DRIVER=database should be changed
+ * to SESSION_DRIVER=file for it to run.
+ */
+Route::get('/driftsstatus-test', function () {
+    return view('status.index', [
+        'carriers' => [
+            [
+                'name'      => 'GLS',
+                'logo'      => 'gls.png',
+                'has_issue' => true,
+                'message'   => 'Label-generering fejler i øjeblikket.',
+            ],
+            [
+                'name'      => 'DFM',
+                'logo'      => 'dfm.png',
+                'has_issue' => true,
+                'message'   => 'Servicepoint-opslag fejler for enkelte postnumre.',
+            ],
+            [
+                'name'      => 'Packeta',
+                'logo'      => 'packeta.png',
+                'has_issue' => true,
+                'message'   => 'Packeta API svarer langsomt – der kan forekomme timeouts.',
+            ],
+            [
+                'name'      => 'Bring',
+                'logo'      => 'bring.png',
+                'has_issue' => false,
+                'message'   => 'Ingen kendte problemer.',
+            ],
+            [
+                'name'      => 'PostNord',
+                'logo'      => 'pdk.png',
+                'has_issue' => false,
+                'message'   => 'Ingen kendte problemer.',
+            ],
+            [
+                'name'      => 'DAO',
+                'logo'      => 'dao.png',
+                'has_issue' => false,
+                'message'   => 'Ingen kendte problemer.',
+            ],
+        ],
+    ]);
 });
-
