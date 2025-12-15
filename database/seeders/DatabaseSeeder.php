@@ -16,14 +16,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            ExceptionSeeder::class,
+            AIExceptionSeeder::class
         ]);
 
-        // Test seeders for the status page
-        // Can be deleted later when everything worksphp artisan db:seed
-        $this->call(StructuredExceptionsSeeder::class);
+
+
+
+//        User::factory()->create([
+//            'name' => 'Test User',
+//            'email' => 'test@example.com',
+//        ]);
     }
 }

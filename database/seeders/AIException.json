@@ -1,0 +1,44 @@
+[
+    {
+        "affected_carrier": "DFM",
+        "is_internal": false,
+        "severity": "CRITICAL",
+        "full_readable_error_message": "Package Number Not Found",
+        "exception_id": 1,
+        "user_id": 1,
+        "line_number": "414",
+        "code": "404",
+        "type": "CarrierException",
+        "file_name": "ShipmentModule",
+        "concrete_error_message": "Package Not Found",
+        "cfl": "DFM-ShipmentModule-414"
+    },
+    {
+    "affected_carrier": "PACKETA",
+    "is_internal": false,
+    "severity": "CRITICAL",
+    "full_readable_error_message": "Carrier Down",
+    "exception_id": 5,
+    "user_id": 1,
+    "line_number": "48",
+    "code": "500",
+    "type": "CarrierException",
+    "file_name": "PacketaSoapClient",
+    "concrete_error_message": "Carrier Down",
+    "cfl": "PACKETA-PacketaSoapClient-48"
+},
+    {
+    "affected_carrier": "DFM",
+    "is_internal": false,
+    "severity": "CRITICAL",
+    "full_readable_error_message": "syntax error, unexpected token '}', expecting ';'",
+    "exception_id": 3,
+    "user_id": 1,
+    "line_number": "62",
+    "code": "0",
+    "type": "ParseError",
+    "file_name": "TestCommand",
+    "concrete_error_message": "Syntax Error",
+    "cfl": "DFM-TestCommand-62"
+}
+]
