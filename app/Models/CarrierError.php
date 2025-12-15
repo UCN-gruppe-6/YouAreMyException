@@ -29,13 +29,18 @@ use Illuminate\Database\Eloquent\Model;
 class CarrierError extends Model
 {
     //Name of the existing table in your database
-    protected $table = 'structured_exceptions';
+    protected $table = 'repetitive_exceptions';
 
     //We only read the fields
     protected $fillable = [
         'carrier',
         'message',
-        'is_deleted',
+        'short_error_message',
+        'detailed_error_message',
+        'is_solved',
+        'occurrence_count',
+        'is_internal',
+        'severity',
     ];
 
     /**
@@ -44,24 +49,13 @@ class CarrierError extends Model
      * - `carrier` becomes a Carrier enum instance (if supported by the Laravel version)
      */
     protected $casts = [
-        'is_deleted' => 'boolean',
+        'is_solved' => 'boolean',
         'carrier' => Carrier::class, //If this doesn't work, use 'string'
     ];
 
-    /**
-     * Query Scope: notDeleted()
-     *
-     * Filters the query so we only fetch errors that are not soft-deleted.
-     * In this system:
-     * - is_deleted = 0 → active error (should be shown)
-     * - is_deleted = 1 → removed/inactive (should NOT be shown)
-     *
-     * Usage:
-     *      CarrierError::notDeleted()->get();
-     */
-    public function scopeNotDeleted(Builder $query): Builder
+    public function scopeNotSolved(Builder $query): Builder
     {
-        return $query->where('is_deleted', 0);
+        return $query->where('is_solved', false);
     }
 
     /**

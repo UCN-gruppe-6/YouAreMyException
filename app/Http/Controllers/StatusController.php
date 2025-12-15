@@ -58,8 +58,8 @@ class StatusController extends Controller
          */
         $errors = CarrierError::query()
             ->forCarriers($carrierEnums) // Filter by allowed carriers
-            ->notDeleted() // Only active (visible) errors
-            ->whereNotNull('message') // only rows with real errors
+            ->notSolved() // Only active (visible) errors
+            ->whereNotNull('short_error_message') // only rows with real errors
             ->get()
             ->groupBy(function (CarrierError $error) {
                 // If Laravel casts "carrier" into an enum, extract its value:
@@ -94,7 +94,7 @@ class StatusController extends Controller
 
             // Human-readable message for the UI
             $message = $hasIssue
-                ? $carrierErrors->pluck('message')->implode(' • ')
+                ? $carrierErrors->pluck('short_error_message')->implode(' • ')
                 : 'Ingen kendte problemer';
 
             // Data object returned for the frontend
