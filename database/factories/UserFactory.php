@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * UserFactory
+ *
+ * This factory is used to quickly create User records for development and testing.
+ *
+ * Instead of manually creating users in the database,
+ * this factory lets us generate realistic-looking users
+ * whenever we need them.
+ *
+ * In our system, this is useful for:
+ * - testing authentication
+ * - testing user-related functionality
+ * - associating exceptions with users during development
+ *
+ * This factory is NOT used in production.
+ * It only exists to support development, testing, and demos.
+ *
+ * @extends Factory<\App\Models\User>
+ */
+
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -12,12 +32,19 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * This static property is used to reuse the same hashed password for all generated users.
+     *
+     * Why:
+     * - We don’t need a unique password per test user
+     * - Reusing the hash makes factory usage faster and simpler
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
+     * Define the default data for a generated User.
+     *
+     * Every time we create a user using this factory,
+     * these values will be used unless overridden.
      *
      * @return array<string, mixed>
      */
@@ -34,6 +61,9 @@ class UserFactory extends Factory
 
     /**
      * Indicate that the model's email address should be unverified.
+     * Optional state that creates a user with an unverified email.
+     *
+     * This allows us to test scenarios where email verification has not yet been completed.
      */
     public function unverified(): static
     {
