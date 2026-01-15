@@ -19,8 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
     })
     ->withSchedule(function (Schedule $schedule) {
-        //$schedule->command('exceptions:classify')->everyMinute();
-        $schedule->command('exceptions:structured')->everyMinute();
+        $schedule->command('send:ai')->everyMinute();
         $schedule->command('analyze:exception')->everyMinute();
         $schedule->command('resolve:exceptions')->everyThreeMinutes();
     })
